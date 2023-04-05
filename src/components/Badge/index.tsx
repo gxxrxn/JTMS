@@ -1,4 +1,6 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
+import { CSSProperties, PropsWithChildren } from "react";
+
 const BadgeContainer = styled.div`
   position: relative;
   display: inline-block;
@@ -25,6 +27,15 @@ const Super = styled.sup`
   }
 `;
 
+interface BadgeProps {
+  count: number;
+  maxCount: number;
+  showZero: boolean;
+  dot: boolean;
+  backgroundColor: CSSProperties["backgroundColor"];
+  textColor: CSSProperties["color"];
+}
+
 const Badge = ({
   children,
   count,
@@ -34,7 +45,7 @@ const Badge = ({
   backgroundColor,
   textColor,
   ...props
-}) => {
+}: PropsWithChildren<BadgeProps>) => {
   const colorStyle = {
     backgroundColor,
     color: textColor,
@@ -44,17 +55,16 @@ const Badge = ({
 
   if (count) {
     badge = (
-      <Super style={colorStyle}>
-        {maxCount && count > maxCount ? `${maxCount}+` : count}
-      </Super>
+      <Super style={colorStyle}>{maxCount && count > maxCount ? `${maxCount}+` : count}</Super>
     );
   } else {
     if (count !== undefined) {
       badge = showZero ? <Super style={colorStyle}>0</Super> : null;
     } else if (dot) {
-      badge = <Super className='dot' style={colorStyle}></Super>;
+      badge = <Super className="dot" style={colorStyle}></Super>;
     }
   }
+
   return (
     <BadgeContainer {...props}>
       {children}

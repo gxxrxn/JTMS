@@ -1,4 +1,5 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
+import { HTMLAttributes } from "react";
 
 const ProgressContainer = styled.div`
   position: relative;
@@ -49,7 +50,12 @@ const Track = styled.div`
   }
 `;
 
-const Progress = ({ value, onChange, ...props }) => {
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  value: number;
+  onChange?: () => void;
+}
+
+const Progress = ({ value, onChange, ...props }: Props) => {
   return (
     <ProgressContainer {...props}>
       <Rail />

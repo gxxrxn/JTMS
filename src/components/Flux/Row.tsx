@@ -1,14 +1,20 @@
-import styled from '@emotion/styled';
-import FluxProvider from './FluxProvider';
-import { useMemo } from 'react';
+import styled from "@emotion/styled";
+import FluxProvider, { FluxContextProps } from "./FluxProvider";
+import { PropsWithChildren, useMemo, CSSProperties } from "react";
 
 const AlignCssValue = {
-  top: 'flex-start',
-  middle: 'center',
-  bottom: 'flex-end',
-};
+  top: "flex-start",
+  middle: "center",
+  bottom: "flex-end",
+} as const;
 
-const StyledRow = styled.div`
+interface StyledRowProps {
+  justify: CSSProperties["justifyContent"];
+  align: keyof typeof AlignCssValue;
+  style: CSSProperties;
+}
+
+const StyledRow = styled.div<StyledRowProps>`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -18,7 +24,9 @@ const StyledRow = styled.div`
   align-items: ${({ align }) => AlignCssValue[align]};
 `;
 
-const Row = ({ children, justify, align, gutter, ...props }) => {
+type RowProps = StyledRowProps & FluxContextProps;
+
+const Row = ({ children, justify, align, gutter, ...props }: PropsWithChildren<RowProps>) => {
   const gutterStyle = useMemo(() => {
     if (Array.isArray(gutter)) {
       const horizentalGutter = gutter[0];
@@ -36,6 +44,7 @@ const Row = ({ children, justify, align, gutter, ...props }) => {
       };
     }
   }, [gutter]);
+
   return (
     <FluxProvider gutter={gutter}>
       <StyledRow

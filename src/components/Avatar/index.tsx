@@ -1,14 +1,19 @@
-import ImageComponent from '../Image';
-import styled from '@emotion/styled';
-import { useState, useEffect } from 'react';
-import AvatarGroup from './AvatarGroup';
+import ImageComponent, { ImageProps } from "../Image";
+import styled from "@emotion/styled";
+import { useState, useEffect, CSSProperties } from "react";
+import AvatarGroup from "./AvatarGroup";
 
 const ShapeToCssValue = {
-  circle: '50%',
-  round: '4px',
-  square: '0px',
-};
-const AvatarWrapper = styled.div`
+  circle: "50%",
+  round: "4px",
+  square: "0px",
+} as const;
+
+interface AvatarWrapperProps {
+  shape: keyof typeof ShapeToCssValue;
+}
+
+const AvatarWrapper = styled.div<AvatarWrapperProps>`
   position: relative;
   display: inline-block;
   border: 1px solid #dadada;
@@ -20,18 +25,24 @@ const AvatarWrapper = styled.div`
     transition: opacity 0.2s ease-out;
   }
 `;
+
+interface AvartarProps extends AvatarWrapperProps, ImageProps {
+  size?: CSSProperties["width"] | CSSProperties["height"];
+  __TYPE?: "Avatar";
+}
+
 const Avatar = ({
   lazy,
   threshold,
   src,
   size = 70,
-  shape = 'circle', // round, sqare 등이 있음
+  shape = "circle", // round, sqare 등이 있음
   placeholder,
   alt,
   __TYPE,
-  mode = 'dover',
+  mode = "cover",
   ...props
-}) => {
+}: AvartarProps) => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -57,13 +68,14 @@ const Avatar = ({
     </AvatarWrapper>
   );
 };
+
 Avatar.defaultProps = {
-  __TYPE: 'Avatar',
+  __TYPE: "Avatar",
 };
 
-Avatar.propTypes = {
-  __TYPE: 'Avatar',
-};
+// Avatar.propTypes = {
+//   __TYPE: "Avatar",
+// };
 
 Avatar.Group = AvatarGroup;
 

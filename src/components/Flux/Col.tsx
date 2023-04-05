@@ -1,8 +1,14 @@
-import styled from '@emotion/styled';
-import { useFlux } from './FluxProvider';
-import { useMemo } from 'react';
+import styled from "@emotion/styled";
+import { useFlux } from "./FluxProvider";
+import { CSSProperties, PropsWithChildren, useMemo } from "react";
 
-const StyledCol = styled.div`
+interface StyledColProps {
+  span?: number;
+  offset?: number;
+  style?: CSSProperties;
+}
+
+const StyledCol = styled.div<StyledColProps>`
   max-width: 100% fit-content;
   box-sizing: border-box;
 
@@ -11,7 +17,7 @@ const StyledCol = styled.div`
   margin-left: ${({ offset }) => offset && `${(offset / 12) * 100}%`};
 `;
 
-const Col = ({ children, span, offset, ...props }) => {
+const Col = ({ children, span, offset, ...props }: PropsWithChildren<StyledColProps>) => {
   const { gutter } = useFlux();
 
   const gutterStyle = useMemo(() => {
@@ -33,12 +39,7 @@ const Col = ({ children, span, offset, ...props }) => {
   }, [gutter]);
 
   return (
-    <StyledCol
-      {...props}
-      span={span}
-      offset={offset}
-      style={{ ...props.style, ...gutterStyle }}
-    >
+    <StyledCol {...props} span={span} offset={offset} style={{ ...props.style, ...gutterStyle }}>
       {children}
     </StyledCol>
   );
